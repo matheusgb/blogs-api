@@ -1,13 +1,14 @@
 const express = require('express');
 const loginRouter = require('./routes/login.route');
-const loginMiddleware = require('./middlewares/login.middleware');
+const userRouter = require('./routes/user.route');
 
 // ...
 
 const app = express();
 
 app.use(express.json());
-app.use('/login', loginMiddleware, loginRouter);
+app.use('/login', loginRouter);
+app.use('/user', userRouter);
 
 // ...
 

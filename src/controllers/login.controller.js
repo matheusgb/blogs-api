@@ -2,7 +2,6 @@ const loginService = require('../services/login.service');
 const statusCode = require('../helpers/statusCode');
 
 const loginController = async (req, res) => {
-  // const { email, password } = loginService.validadeBody(req.body);
   const { email, password } = req.body;
 
   try {
