@@ -26,4 +26,19 @@ const userGetAllController = async (_req, res) => {
   }
 };
 
-module.exports = { userCreateController, userGetAllController };
+const getOneUserController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await userService.getOneUser(id);
+    
+    if (!user) {
+      return res.status(statusCode.NOT_FOUND).json({ message: 'User does not exist' });
+    }
+
+    res.status(statusCode.OK).json(user);
+  } catch (e) {
+    res.status(e.status || 500).json({ message: e.message });
+  }
+};
+
+module.exports = { userCreateController, userGetAllController, getOneUserController };
