@@ -1,7 +1,7 @@
 const userService = require('../services/user.service');
 const statusCode = require('../helpers/statusCode');
 
-const userController = async (req, res) => {
+const userCreateController = async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
   try {
@@ -17,4 +17,13 @@ const userController = async (req, res) => {
   }
 };
 
-module.exports = { userController };
+const userGetAllController = async (_req, res) => {
+  try {
+    const users = await userService.getAllUsers();
+    res.status(statusCode.OK).json(users);
+  } catch (e) {
+    res.status(e.status || 500).json({ message: e.message });
+  }
+};
+
+module.exports = { userCreateController, userGetAllController };
