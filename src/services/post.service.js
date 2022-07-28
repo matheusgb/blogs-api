@@ -45,4 +45,25 @@ const listOnePostService = async (id) => {
   return post;
 };
 
-module.exports = { createPostService, listAllPostsService, listOnePostService };
+const editPostService = async ({ title, content, idUser, idParam }) => {
+  const post = await BlogPost.findOne({ where: { id: idParam, userId: idUser } });
+  if (!post) return false;
+
+  await post.update({
+    title,
+    content,
+    updated: Date.now(),
+  });
+
+  const result = await BlogPost.findOne({
+    where: { userId: idUser },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  return result;
+};
+
+module.exports = { createPostService, listAllPostsService, listOnePostService, editPostService };

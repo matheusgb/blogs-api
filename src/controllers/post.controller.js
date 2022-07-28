@@ -1,5 +1,5 @@
 const { createPostService, listAllPostsService, 
-  listOnePostService } = require('../services/post.service');
+  listOnePostService, editPostService } = require('../services/post.service');
 const statusCode = require('../helpers/statusCode');
 
 const createPostController = async (req, res) => {
@@ -21,4 +21,13 @@ const listOnePostController = async (req, res) => {
   return res.status(statusCode.OK).json(post);
 };
 
-module.exports = { createPostController, listAllPostsController, listOnePostController };
+const editPostController = async (req, res) => {
+  const post = await editPostService({ ...req.body, idUser: req.user.id, idParam: req.params.id });
+  if (!post) return res.status(statusCode.UNAUTHORIZED).json({ message: 'Unauthorized user' });
+  return res.status(statusCode.OK).json(post);
+};
+
+module.exports = { createPostController,
+listAllPostsController, 
+listOnePostController,
+editPostController };
