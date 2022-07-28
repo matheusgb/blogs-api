@@ -34,4 +34,15 @@ const listAllPostsService = async () => {
   return posts;
 };
 
-module.exports = { createPostService, listAllPostsService };
+const listOnePostService = async (id) => {
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+  return post;
+};
+
+module.exports = { createPostService, listAllPostsService, listOnePostService };
