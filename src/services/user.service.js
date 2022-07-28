@@ -1,7 +1,7 @@
 const { User } = require('../database/models');
 const { createToken } = require('./jwt.service');
 
-const createUser = async ({ displayName, email, password, image }) => {
+const createUserService = async ({ displayName, email, password, image }) => {
   const findOne = await User.findOne({ where: { email } });
   if (findOne) {
     return 'ALREADY_EXISTS';
@@ -13,7 +13,7 @@ const createUser = async ({ displayName, email, password, image }) => {
   return token;
 };
 
-const getAllUsers = async () => {
+const getAllUsersService = async () => {
   const users = await User.findAll(
     {
       attributes: { exclude: ['password'] },
@@ -22,7 +22,7 @@ const getAllUsers = async () => {
   return users;
 };
 
-const getOneUser = async (id) => {
+const getOneUserService = async (id) => {
   const user = await User.findOne({ 
     where: { id },
     attributes: { exclude: ['password'] },
@@ -30,4 +30,8 @@ const getOneUser = async (id) => {
   return user;
 };
 
-module.exports = { createUser, getAllUsers, getOneUser };
+const deleteUserService = async (id) => {
+  const user = await User.destroy({ where: { id } });
+  return user;
+};
+module.exports = { createUserService, getAllUsersService, getOneUserService, deleteUserService };
