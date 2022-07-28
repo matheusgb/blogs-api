@@ -1,5 +1,6 @@
 const { createPostService, listAllPostsService, 
-  listOnePostService, editPostService, deletePostService } = require('../services/post.service');
+  listOnePostService,
+  editPostService, deletePostService, searchPostService } = require('../services/post.service');
 const statusCode = require('../helpers/statusCode');
 
 const createPostController = async (req, res) => {
@@ -38,8 +39,15 @@ const deletePostController = async (req, res) => {
   return res.status(statusCode.NO_CONTENT).json({ message: result });
 };
 
+const searchPostController = async (req, res) => {
+  const { q } = req.query;
+  const posts = await searchPostService(q);
+  return res.status(statusCode.OK).json(posts);
+};
+
 module.exports = { createPostController,
 listAllPostsController, 
 listOnePostController,
 editPostController,
-deletePostController };
+deletePostController,
+searchPostController };
