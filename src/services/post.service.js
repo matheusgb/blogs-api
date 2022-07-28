@@ -66,4 +66,23 @@ const editPostService = async ({ title, content, idUser, idParam }) => {
   return result;
 };
 
-module.exports = { createPostService, listAllPostsService, listOnePostService, editPostService };
+const deletePostService = async (idUser, idParam) => {
+  const verifyId = await BlogPost.findOne({ where: { id: idParam } });
+  if (!verifyId) return 'NOT_FOUND';
+
+  const post = await BlogPost.findOne({ where: { id: idParam, userId: idUser } });
+  if (!post) return 'UNAUTHORIZED';
+
+  const result = await post.destroy(
+    {
+      where: { id: idParam },
+    },
+  );
+  return result;
+};
+
+module.exports = { createPostService,
+listAllPostsService,
+listOnePostService,
+editPostService,
+deletePostService };

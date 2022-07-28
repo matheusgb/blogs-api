@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { createPostController, listAllPostsController, 
-  listOnePostController, editPostController } = require('../controllers/post.controller');
+  listOnePostController, editPostController, 
+  deletePostController } = require('../controllers/post.controller');
 const postMiddleware = require('../middlewares/post.middleware');
 const jwtMiddleware = require('../middlewares/jwt.middleware');
 const putPostMiddleware = require('../middlewares/putPost.middleware');
@@ -11,5 +12,6 @@ router.post('/', jwtMiddleware, postMiddleware, createPostController);
 router.get('/', jwtMiddleware, listAllPostsController);
 router.get('/:id', jwtMiddleware, listOnePostController);
 router.put('/:id', jwtMiddleware, putPostMiddleware, editPostController);
+router.delete('/:id', jwtMiddleware, deletePostController);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const { createPostService, listAllPostsService, 
-  listOnePostService, editPostService } = require('../services/post.service');
+  listOnePostService, editPostService, deletePostService } = require('../services/post.service');
 const statusCode = require('../helpers/statusCode');
 
 const createPostController = async (req, res) => {
@@ -27,7 +27,19 @@ const editPostController = async (req, res) => {
   return res.status(statusCode.OK).json(post);
 };
 
+const deletePostController = async (req, res) => {
+  const result = await deletePostService(req.user.id, req.params.id);
+  if (result === 'NOT_FOUND') {
+    return res.status(statusCode.NOT_FOUND).json({ message: 'Post does not exist' });
+  }
+  if (result === 'UNAUTHORIZED') {
+  return res.status(statusCode.UNAUTHORIZED).json({ message: 'Unauthorized user' });
+  }
+  return res.status(statusCode.NO_CONTENT).json({ message: result });
+};
+
 module.exports = { createPostController,
 listAllPostsController, 
 listOnePostController,
-editPostController };
+editPostController,
+deletePostController };
