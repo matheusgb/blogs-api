@@ -9,11 +9,7 @@ const validadeBody = (req, res, next) => {
     .messages({ 'string.empty': 'Some required fields are missing' }),
     content: Joi.string().required()
     .messages({ 'string.empty': 'Some required fields are missing' }),
-    categoryIds: Joi.array().required()
-      .messages({
-        'array.base': '"categoryIds" must be an array',
-        'array.required': '"categoryIds" not found',
-      }),
+    categoryIds: Joi.array().required(),
   });
 
   const { error } = schema.validate(body);
