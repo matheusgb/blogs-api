@@ -2,4 +2,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: node src/api/server
+  web: node src/server
