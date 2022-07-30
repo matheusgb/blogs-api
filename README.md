@@ -1,6 +1,11 @@
 # Blogs API
 
 ![DER](images/der.png)
+_________________________________
+
+**Aplicação em manutenção**
+_________________________________
+
 
 Nesse projeto foi desenvolvido um serviço RESTful de um blog com arquitetura MSC.
 
