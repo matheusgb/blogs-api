@@ -2,7 +2,968 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Blogs API",
-    "description": "Swagger em construção",
+    "description": "Essa documentação tem como objetivo demonstrar funcionalidades dessa aplicação, como: endpoints e corpo de requisição.",
+    "contact": {
+      "email": "matheusgbr98@gmail.com"
+    },
     "version": "1.0.0"
+  },
+  "servers": [
+      {
+        "url": "https://mgb-blogsapi.herokuapp.com"
+      }
+    ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Login de usuário (Aqui é possivel ter acesso ao token)",
+        "description": "Essa rota será responsável por logar na plataforma e obter o token de acesso. Adicione o token gerado no Authorize para ter acesso ao restante da aplicação.",
+        "tags": ["Login"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequisicaoLogin"
+              },
+              "examples": {
+                "login": {
+                  "value": {
+                    "email": "ayrtonsenna@email.com",
+                    "password": "formulaum"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Some required fields are invalid or missing"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Cadastra novo usuário (Aqui é possivel ter acesso ao token)",
+        "description": "Essa rota será responsável por criar um novo usuário na plataforma e obter o token de acesso. Adicione o token gerado no Authorize para ter acesso ao restante da aplicação.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequisicaoCriarUsuario"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "displayName": "Romário de Souza Faria",
+                    "email": "camisa9@email.com",
+                    "password": "vascodagama",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Foto_oficial_de_Rom%C3%A1rio_%28v._AgSen%29.jpg/250px-Foto_oficial_de_Rom%C3%A1rio_%28v._AgSen%29.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some required fields are invalid or missing"
+          },
+          "409": {
+            "description": "User already registered"
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todos os usuários",
+        "description": "Lista todos os usuários cadastrados",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoListarUsuarios"
+                },
+                "examples": {
+                  "listUsers": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "displayName": "Lewis Hamilton",
+                        "email": "lewishamilton@gmail.com",
+                        "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                      },
+                      {
+                        "id": 2,
+                        "displayName": "Michael Schumacher",
+                        "email": "MichaelSchumacher@gmail.com",
+                        "image": "https://sportbuzz.uol.com.br/media/_versions/gettyimages-52491565_widelg.jpg"
+                      },
+                      {
+                        "id": 3,
+                        "displayName": "ayrtonsenna@email.com",
+                        "email": "ayrtonsenna@email.com",
+                        "image": "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcQwc5S5usDWgkiN2FhALW_HW40wiHhwU6VjsvvJqRppdoQ5XOkcQ25Ro8sHy2mue9ba"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Encontra usuário pelo ID",
+        "description": "Encontra usuário cadastrado pelo ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Insira um ID abaixo para pesquisar"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarUsuarioId"
+                },
+                "examples": {
+                  "getUser": {
+                    "value": {
+                      "id": 1,
+                      "displayName": "Lewis Hamilton",
+                      "email": "lewishamilton@gmail.com",
+                      "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+    "/user/me": {
+      "delete": {
+        "summary": "Excluir usuário",
+        "description": "Exclui usuário logado (dono do token) ",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "post": {
+        "summary": "Cadastra nova categoria",
+        "description": "Aqui é possivel cadastrar uma nova categoria de post",
+        "tags": ["Categories"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequisicaoCriarCategoria"
+              },
+              "examples": {
+                "category": {
+                  "value": {
+                    "name": "Futebol"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCategory"
+                },
+                "examples": {
+                  "category": {
+                    "value": {
+                      "id": 3,
+                      "name": "Futebol"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some required fields are invalid or missing"
+          },
+          "409": {
+            "description": "Category already registered"
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todas categorias existentes",
+        "description": "Lista categorias cadastradas no banco de dados",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoListarCategorias"
+                },
+                "examples": {
+                  "listCategories": {
+                    "value": [
+                      {
+                          "id": 1,
+                          "name": "Formula 1"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Basquete"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "summary": "Encontra categoria pelo ID",
+        "description": "Encontra uma categoria pelo ID",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Insira um ID abaixo para pesquisar"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarCategoriaId"
+                },
+                "examples": {
+                  "getCategory": {
+                    "value": {
+                      "id": 3,
+                      "name": "Futebol"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Category does not exist"
+          }
+        }
+      }
+    },
+    "/post": {
+      "post": {
+        "summary": "Cria postagem",
+        "description": "Cria um novo post",
+        "tags": ["Posts"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequisicaoCriarPost"
+              },
+              "examples": {
+                "createPost": {
+                  "value": {
+                    "title": "Frase do ex-atleta olímpico Carl Lewis",
+                    "content": "Se você não tem confiança, sempre encontrará uma maneira de não vencer",
+                    "categoryIds": [1, 2]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoCriarPost"
+                },
+                "examples": {
+                  "post": {
+                    "value": {
+                      "id": 3,
+                      "title": "Frase do ex-atleta olímpico Carl Lewis",
+                      "content": "Se você não tem confiança, sempre encontrará uma maneira de não vencer",
+                      "userId": 1,
+                      "updated": "2022-07-30T18:39:01.187Z",
+                      "published": "2022-07-30T18:39:01.187Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some required fields are invalid or missing"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todas publicações",
+        "description": "Lista as publicações cadastradas no bando de dados",
+        "tags": ["Posts"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarPosts"
+                },
+                "examples": {
+                  "listPosts": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "title": "Post do Ano",
+                        "content": "Melhor post do ano",
+                        "userId": 1,
+                        "published": "2011-08-01T19:58:00.000Z",
+                        "updated": "2011-08-01T19:58:51.000Z",
+                        "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                        },
+                        "categories": [
+                          {
+                            "id": 1,
+                            "name": "Inovação"
+                          }
+                        ]
+                      },
+                      {
+                        "id": 2,
+                        "title": "Post 2",
+                        "content": "Melhor post 2",
+                        "userId": 1,
+                        "published": "2011-08-01T20:58:00.000Z",
+                        "updated": "2011-08-01T20:58:51.000Z",
+                        "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                        },
+                        "categories": [
+                          {
+                            "id": 1,
+                            "name": "Inovação"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/post/{id}": {
+      "get": {
+        "summary": "Encontra post pelo ID",
+        "description": "Ao informar o ID você consegue localiza-lo",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Insira um ID abaixo para pesquisar"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarPostId"
+                },
+                "examples": {
+                  "getPost": {
+                    "value": {
+                      "id": 1,
+                      "title": "Post do Ano",
+                      "content": "Melhor post do ano",
+                      "userId": 1,
+                      "published": "2011-08-01T19:58:00.000Z",
+                      "updated": "2011-08-01T19:58:51.000Z",
+                      "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                      },
+                      "categories": [
+                          {
+                              "id": 1,
+                              "name": "Formula 1"
+                          }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Post does not exist"
+          }
+        }
+      },
+      "put": {
+        "summary": "Edita a publicação",
+        "description": "Edita a publicação informando o ID",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Insira um ID abaixo"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequisicaoEditarPost"
+              },
+              "examples": {
+                "createPost": {
+                  "value": {
+                    "title": "Título editado",
+                    "content": "Post editado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarPostId"
+                },
+                "examples": {
+                  "getPost": {
+                    "value": {
+                      "id": 1,
+                      "title": "Título editado",
+                      "content": "Post editado",
+                      "userId": 1,
+                      "published": "2011-08-01T19:58:00.000Z",
+                      "updated": "2011-08-01T19:58:51.000Z",
+                      "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                      },
+                      "categories": [
+                          {
+                              "id": 1,
+                              "name": "Formula 1"
+                          }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Some required fields are invalid or missing"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Post does not exist"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclui publicação",
+        "description": "Exclui a publicação informando o id",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Insira um ID abaixo para remover a publicação"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Post does not exist"
+          }
+        }
+      }
+    },
+    "/post/search": {
+      "get": {
+        "summary": "Pesquisa publicações",
+        "description": "Pesquisa publicações por palavra chave",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Palavra chave"
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoPegarPosts"
+                },
+                "examples": {
+                  "getPost": {
+                    "value": [
+                      {
+                        "id": 2,
+                        "title": "Exemplo título",
+                        "content": "Exemplo conteúdo",
+                        "userId": 1,
+                        "published": "2011-08-01T19:58:00.000Z",
+                        "updated": "2011-08-01T19:58:51.000Z",
+                        "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                        },
+                        "categories": [
+                          {
+                            "id": 2,
+                            "name": "Basquete"
+                          }
+                        ]
+                      },
+                      {
+                        "id": 3,
+                        "title": "Segundo exemplo",
+                        "content": "Exemplo de post",
+                        "userId": 1,
+                        "published": "2011-08-01T20:58:00.000Z",
+                        "updated": "2011-08-01T20:58:51.000Z",
+                        "user": {
+                          "id": 1,
+                          "displayName": "Lewis Hamilton",
+                          "email": "lewishamilton@gmail.com",
+                          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+                        },
+                        "categories": [
+                          {
+                            "id": 1,
+                            "name": "Formula 1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "RequisicaoLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "RequisicaoCriarUsuario": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type":"string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        }
+      },
+      "RequisicaoCriarPost": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "categoryIds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "RequisicaoEditarPost": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "RequisicaoCriarCategoria": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultadoPegarUsuarioId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultadoListarUsuarios": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ResultadoPegarCategoriaId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultadoListarCategorias": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ResultadoCriarPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "updated": {
+            "type": "string"
+          },
+          "published": {
+            "type": "string"
+          }
+        }
+      },
+      "ResultadoPegarPostId": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "updated": {
+            "type": "string"
+          },
+          "published": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              }
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResultadoPegarPosts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "number"
+            },
+            "updated": {
+              "type": "string"
+            },
+            "published": {
+              "type": "string"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "image": {
+                  "type": "string"
+                }
+              }
+            },
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
   }
 }
+
