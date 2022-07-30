@@ -1,3 +1,8 @@
 {
-  "comment": "Arquivo em construção"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Blogs API",
+    "description": "Swagger em construção",
+    "version": "1.0.0"
+  }
 }
