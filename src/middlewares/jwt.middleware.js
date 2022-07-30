@@ -10,7 +10,8 @@ const validateToken = (req, res, next) => {
   }
 
   try {
-  const { data } = jwt.verify(authorization, process.env.JWT_SECRET);
+    const token = authorization.replace(/^Bearer\s/, '');
+  const { data } = jwt.verify(token, process.env.JWT_SECRET);
   req.user = data;
   next();
   } catch (_error) {
