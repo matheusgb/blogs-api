@@ -6,7 +6,7 @@ Nesse projeto foi desenvolvido um serviço RESTful de um blog com arquitetura MS
 
 A conexão com o banco de dados foi feita usando ORM Sequelize, autenticação com JWT e o banco de dados é o postgres hospedado no supabase.
 
-[Aqui](https://mgb-blogsapi.herokuapp.com/docs/) você consegue ver o funcionamento da API via swagger.
+[Aqui](https://mgb-blogsapi.herokuapp.com/docs/) você consegue ver o funcionamento da API via swagger. (em construção)
 
 Arquivo .json do swagger foi disponibilizado por [Raphael Martins](https://www.linkedin.com/in/raphaelameidamartins/)
 
