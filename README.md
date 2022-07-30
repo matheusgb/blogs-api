@@ -27,9 +27,9 @@ Arquivo .json do swagger disponibilizado por [Raphael Martins](https://www.linke
 
 Você pode consumir os endpoints pela URL https://mgb-blogsapi.herokuapp.com
 
-É necessário que faça login para acessar os endpoints.
+É necessário que faça login e utilize o token retornado para acessar os endpoints.
 
-Você pode utilizar:
+Você pode utilizar o usuário:
 
 ```
 {
@@ -38,7 +38,7 @@ Você pode utilizar:
 }
 ```
 
-Ou criar um novo no endpoint POST /user com:
+Ou criar um novo usuário no endpoint POST /user com:
 
 ```
 {
@@ -49,7 +49,7 @@ Ou criar um novo no endpoint POST /user com:
 }
 ```
 
-e depois fazer login em POST /login.
+e depois fazer login em POST /login e utilizar o token retornado.
 
 
 ## Nota
